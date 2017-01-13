@@ -7,7 +7,7 @@
  * @author Jiri Svoboda <jiri.svoboda@dlds.cz>
  */
 
-namespace dlds\forms\interfaces;
+namespace dlds\forms\groupable\interfaces;
 
 /**
  * This is the Master groupable form interface

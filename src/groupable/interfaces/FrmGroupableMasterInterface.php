@@ -7,7 +7,7 @@
  * @author Jiri Svoboda <jiri.svoboda@dlds.cz>
  */
 
-namespace dlds\forms\interfaces;
+namespace dlds\forms\groupable\interfaces;
 
 /**
  * This is the Master groupable form interface
@@ -25,18 +25,18 @@ interface FrmGroupableMasterInterface
     /**
      * Loads data into slaves and master
      */
-    public function __load();
-    
+    public function __load($data, $formName = null);
+
     /**
      * Loads data into master
      */
-    public function __loadMaster();
+    public function __loadMaster($data, $formName = null);
 
     /**
      * Process slaves saving
      */
     public function __process();
-    
+
     /**
      * Retrieves validation rules
      */
@@ -57,4 +57,9 @@ interface FrmGroupableMasterInterface
      * Retrieves slaves rules
      */
     public function __seRules();
+
+    /**
+     * Validates slaves
+     */
+    public function __validateSlaves();
 }

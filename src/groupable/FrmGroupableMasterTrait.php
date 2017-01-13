@@ -7,7 +7,7 @@
  * @author Jiri Svoboda <jiri.svoboda@dlds.cz>
  */
 
-namespace dlds\forms;
+namespace dlds\forms\groupable;
 
 use yii\helpers\ArrayHelper;
 
@@ -50,13 +50,27 @@ trait FrmGroupableMasterTrait
     protected $__rsValidation;
 
     /**
-     * @inheritdoc
+     * Runs basic init
      */
     public function init()
     {
         $this->__init();
+    }
 
-        parent::init();
+    /**
+     * Runs data load
+     */
+    public function load($data, $formName = null)
+    {
+        return $this->__load($data, $formName);
+    }
+
+    /**
+     * Runs main process
+     */
+    public function process()
+    {
+        return $this->__process();
     }
 
     /**
@@ -64,7 +78,9 @@ trait FrmGroupableMasterTrait
      */
     public function rules()
     {
-        return ArrayHelper::merge([['__slaves'], 'validateSlaves'], $this->__rules());
+        return ArrayHelper::merge([
+                [['__slaves'], '__validateSlaves'],
+                ], $this->__rules());
     }
 
     /**
@@ -72,7 +88,7 @@ trait FrmGroupableMasterTrait
      */
     public function __init()
     {
-        foreach ($this->seRules() as $id => $class) {
+        foreach ($this->__seRules() as $id => $class) {
             $this->__slaves[$id] = $this->initSlave($class);
         }
     }
@@ -121,6 +137,16 @@ trait FrmGroupableMasterTrait
     }
 
     /**
+     * Validates all slaves
+     */
+    public function __validateSlaves()
+    {
+        foreach ($this->__slaves as $id => $model) {
+            $this->addResult($model->__validate(), $this->__rsValidation);
+        }
+    }
+
+    /**
      * Tracks load result
      * @param boolean $result
      */
@@ -140,10 +166,10 @@ trait FrmGroupableMasterTrait
      */
     protected function initSlave($class)
     {
-        $uses = class_uses($class);
+        $intrfs = class_implements($class);
 
-        if (!ArrayHelper::isIn(interfaces\FrmGroupableSlaveInterface::class, $uses)) {
-            throw new \yii\base\InvalidConfigException(sprintf('Each Slave form has to implements "%s" class', interfaces\FrmGroupableSlaveInterface::class));
+        if (!ArrayHelper::isIn(interfaces\FrmGroupableSlaveInterface::class, $intrfs)) {
+            throw new \yii\base\InvalidConfigException(sprintf('"%s" has to implements "%s" class', $class, interfaces\FrmGroupableSlaveInterface::class));
         }
 
         $model = $class::__find();
@@ -153,16 +179,6 @@ trait FrmGroupableMasterTrait
         }
 
         return $model;
-    }
-
-    /**
-     * Validates all slaves
-     */
-    protected function validateSlaves()
-    {
-        foreach ($this->__slaves as $id => $model) {
-            $this->addResult($model->__validate(), $this->__rsValidation);
-        }
     }
 
 }
