@@ -15,10 +15,6 @@
             "email": "jiri.svoboda@dlds.cz"
         }
     ],
-    "require": {
-        "yiisoft/yii2-gii": "~2.0.0",
-
-    },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
