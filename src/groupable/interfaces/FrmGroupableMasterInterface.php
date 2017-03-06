@@ -59,6 +59,11 @@ interface FrmGroupableMasterInterface
     public function __seRules();
 
     /**
+     * Retrieves slaves rules
+     */
+    public function __seValidationRules();
+
+    /**
      * Validates slaves
      */
     public function __validateSlaves();

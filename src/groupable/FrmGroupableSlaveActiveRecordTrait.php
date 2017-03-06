@@ -2,6 +2,8 @@
 
 namespace dlds\forms\groupable;
 
+use yii\helpers\ArrayHelper;
+
 /**
  * FrmGroupableSlaveActiveRecordTrait
  * ---
@@ -9,6 +11,7 @@ namespace dlds\forms\groupable;
  */
 trait FrmGroupableSlaveActiveRecordTrait
 {
+    protected $additionalsRules = [];
 
     /**
      * @inheritdoc
@@ -32,6 +35,23 @@ trait FrmGroupableSlaveActiveRecordTrait
     public function __validate()
     {
         return $this->validate();
+    }
+
+    /**
+     * Sets additionals rules
+     */
+    public function __addRules(array $rules)
+    {
+        $this->additionalsRules = ArrayHelper::merge($this->additionalsRules, $rules);
+    }
+
+    /**
+     * Retrieves additionals rules
+     * @return array
+     */
+    public function __additionalRules()
+    {
+        return $this->additionalsRules;
     }
 
 }

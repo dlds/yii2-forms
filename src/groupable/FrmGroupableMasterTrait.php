@@ -89,7 +89,7 @@ trait FrmGroupableMasterTrait
     public function __init()
     {
         foreach ($this->__seRules() as $id => $class) {
-            $this->__slaves[$id] = $this->initSlave($class);
+            $this->__slaves[$id] = $this->initSlave($class, $id);
         }
     }
 
@@ -164,7 +164,7 @@ trait FrmGroupableMasterTrait
      * @param string $class
      * @return mixed
      */
-    protected function initSlave($class)
+    protected function initSlave($class, $id)
     {
         $intrfs = class_implements($class);
 
@@ -177,6 +177,10 @@ trait FrmGroupableMasterTrait
         if (!$model) {
             return new $class;
         }
+
+        $rules = ArrayHelper::getValue($this->__seValidationRules(), $id, []);
+
+        $model->__addRules($rules);
 
         return $model;
     }
