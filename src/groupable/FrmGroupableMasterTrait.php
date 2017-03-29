@@ -66,10 +66,49 @@ trait FrmGroupableMasterTrait
     }
 
     /**
+     * Indicates if models have errors
+     * @param null $attribute
+     * @return bool
+     */
+    public function hasErrors($attribute = null)
+    {
+        if (parent::hasErrors($attribute)) {
+            return true;
+        }
+
+        foreach ($this->__slaves as $slave) {
+
+            if ($slave->hasErrors($attribute)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retrieves models errors
+     * @param null $attribute
+     * @return array
+     */
+    public function getErrors($attribute = null)
+    {
+        $errors = parent::getErrors($attribute);
+
+        foreach ($this->__slaves as $slave) {
+
+            $errors = ArrayHelper::merge($errors, $slave->getErrors($attribute));
+        }
+
+        return $errors;
+    }
+
+    /**
      * Runs main process
      */
     public function process()
     {
+        var_dump($this->hasErrors());
         return $this->__process();
     }
 
@@ -79,8 +118,8 @@ trait FrmGroupableMasterTrait
     public function rules()
     {
         return ArrayHelper::merge([
-                [['__slaves'], '__validateSlaves'],
-                ], $this->__rules());
+            [['__slaves'], '__validateSlaves'],
+        ], $this->__rules());
     }
 
     /**
