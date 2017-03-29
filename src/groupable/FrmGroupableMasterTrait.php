@@ -108,7 +108,6 @@ trait FrmGroupableMasterTrait
      */
     public function process()
     {
-        var_dump($this->hasErrors());
         return $this->__process();
     }
 
