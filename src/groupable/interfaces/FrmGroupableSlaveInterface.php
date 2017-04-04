@@ -33,7 +33,12 @@ interface FrmGroupableSlaveInterface
     public function __validate();
 
     /**
+     * Inits new entry
+     */
+    public function __init(FrmGroupableMasterInterface $master);
+
+    /**
      * Loads existing entry
      */
-    public static function __find();
+    public static function __find(FrmGroupableMasterInterface $master);
 }

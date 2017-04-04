@@ -210,10 +210,12 @@ trait FrmGroupableMasterTrait
             throw new \yii\base\InvalidConfigException(sprintf('"%s" has to implements "%s" class', $class, interfaces\FrmGroupableSlaveInterface::class));
         }
 
-        $model = $class::__find();
+        $model = $class::__find($this);
 
         if (!$model) {
-            return new $class;
+            $model = new $class;
+            $model->__init($this);
+            return $model;
         }
 
         $rules = ArrayHelper::getValue($this->__seValidationRules(), $id, []);

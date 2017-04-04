@@ -67,4 +67,11 @@ interface FrmGroupableMasterInterface
      * Validates slaves
      */
     public function __validateSlaves();
+
+    /**
+     * Retrieves master model owner
+     * @return mixed
+     */
+    public static function __owner();
+
 }
